@@ -14,19 +14,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Install necessary collections for validation
-      - name: Install Ansible Galaxy Collections
+      # Install/Update Ansible and Ansible-lint
+      - name: Install Ansible
         run: |
-          ansible-galaxy collection install arista.eos community.general f5networks.f5_modules community.docker
+          python3 -m pip install ansible ansible-lint
 
-      # Set Ansible Collection Path dynamically
+      # Set Ansible Collection Path
       - name: Set Ansible Collection Path
         run: |
           echo "ANSIBLE_COLLECTION_PATHS=$(ansible-galaxy collection list | grep -Eo '/.*')" >> $GITHUB_ENV
 
-      # Run ansible-lint with the set collection path
-      - uses: ansible/ansible-lint@v24.9.2
-        with:
-          working_directory: ./ansible
+      # Run ansible-lint with FQCN resolution
+      - name: Run ansible-lint
         env:
           ANSIBLE_COLLECTION_PATHS: ${{ env.ANSIBLE_COLLECTION_PATHS }}
+        run: ansible-lint ./ansible
