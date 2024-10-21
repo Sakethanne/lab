@@ -13,20 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Install Ansible
-      - name: Install Ansible
-        run: |
-          python3 -m pip install ansible ansible-lint
-
-      # Install required Ansible collections
-      - name: Install Ansible collections
-        run: |
-          ansible-galaxy collection install arista.eos
-          ansible-galaxy collection install community.general
-          ansible-galaxy collection install f5networks.f5_modules
-          ansible-galaxy collection install community.docker
-
+      
       # Set Ansible Collection Path
       - name: Set Ansible Collection Path
         run: |
