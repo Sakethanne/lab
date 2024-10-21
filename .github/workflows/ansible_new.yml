@@ -3,9 +3,9 @@ name: Ansible
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   lint:
@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Install Ansible
+      - name: Install Ansible
+        run: |
+          python3 -m pip install ansible ansible-lint
 
       # Install required Ansible collections
       - name: Install Ansible collections
@@ -22,7 +27,13 @@ jobs:
           ansible-galaxy collection install f5networks.f5_modules
           ansible-galaxy collection install community.docker
 
-      # Run ansible-lint
-      - uses: ansible/ansible-lint@v24.9.2
-        with:
-          working_directory: ./ansible
+      # Set Ansible Collection Path
+      - name: Set Ansible Collection Path
+        run: |
+          echo "ANSIBLE_COLLECTIONS_PATHS=$(ansible-galaxy collection list | grep -Eo '/.*')" >> $GITHUB_ENV
+
+      # Run ansible-lint with FQCN resolution
+      - name: Run ansible-lint
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ${{ env.ANSIBLE_COLLECTIONS_PATHS }}
+        run: ansible-lint ./ansible
