@@ -17,7 +17,7 @@ jobs:
       # Install/Update Ansible and Ansible-lint
       - name: Install Ansible
         run: |
-          python3 -m pip install ansible ansible-lint
+          python3 -m pip install ansible-lint
 
       # Set Ansible Collection Path
       - name: Set Ansible Collection Path
