@@ -13,14 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
+      # Install Ansible
+      - name: Install Ansible
+        run: |
+          python3 -m pip install ansible ansible-lint
+
       # Set Ansible Collection Path
       - name: Set Ansible Collection Path
         run: |
-          echo "ANSIBLE_COLLECTIONS_PATHS=$(ansible-galaxy collection list | grep -Eo '/.*')" >> $GITHUB_ENV
+          echo "ANSIBLE_COLLECTION_PATHS=$(ansible-galaxy collection list | grep -Eo '/.*')" >> $GITHUB_ENV
 
       # Run ansible-lint with FQCN resolution
       - name: Run ansible-lint
         env:
-          ANSIBLE_COLLECTIONS_PATHS: ${{ env.ANSIBLE_COLLECTIONS_PATHS }}
+          ANSIBLE_COLLECTION_PATHS: ${{ env.ANSIBLE_COLLECTION_PATHS }}
         run: ansible-lint ./ansible
