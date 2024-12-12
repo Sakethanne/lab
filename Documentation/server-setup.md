@@ -2,10 +2,24 @@
 
 ## Automation
 
-Then run the [playbook](../ansible) to automate all the lab steps:
+Then run the [playbook](../ansible/site.yml) to automate all the lab steps:
 
 ```bash
 ansible-playbook -i inventory site.yml
+```
+
+### Automated OS Installation for Dell iDRAC Systems
+
+For completely automating the installation using an Ubuntu auto install ISO image see [here](auto_install_ubuntu_iso.md).
+
+The Ansible playbook [install_os.yml](../ansible/install_os.yml) will automate the installation of Ubuntu Jammy 22.04 on Dell servers using iDRAC, dellemc.openmanage library and the autoinstall Ubuntu iso that we have created. This script currently supports the dell machines only.
+
+Fore more details on the dellemc.openmanage idrac_os_deployment ansible role that was used in the playbook, refer the documentation [here](https://github.com/dell/dellemc-openmanage-ansible-modules/tree/collections/roles/idrac_os_deployment).
+
+To run the playbook:
+
+```bash
+ansible-playbook -i inventory install_os.yml
 ```
 
 ## Manual
@@ -13,6 +27,8 @@ ansible-playbook -i inventory site.yml
 For more details on iDRAC OS Installation using Virtual media see [here](idrac_os_installation_steps_virtual_media.md).
 
 For more details on iDRAC OS Installation using Remote File Share see [here](idrac_os_installation_steps_network.md).
+
+### Manual OS Installation for Dell iDRAC Systems
 
 * Install Ubuntu[^1] 22.04 x64 on the server. ([ubuntu-22.04.1-live-server-amd64.iso](https://releases.ubuntu.com/22.04/))
   * select all default options (unless otherwise noted bellow)
